@@ -38,8 +38,6 @@ model = ball
 
 function drawModel(mod){
     ctx.canvas.width = ctx.canvas.width;
-    ctx.fillStyle = "red"
-    ctx.fillRect(offset-2,offset-2,4,4)
     for(let i=0;i<mod.edges.length;i++){
         
         side = mod.edges[i];
