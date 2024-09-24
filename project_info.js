@@ -9,6 +9,6 @@ projectInformation = [
         name:"Cow Rotator",
         description:"Rotate a cow. WASDQE to control. Best used on mobile.",
         filename:"cow-rotator.html",
-        image:"maze_demo.gif"
+        image:"cow.gif"
     }
 ]
