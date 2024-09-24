@@ -1,11 +1,13 @@
 const canvas = document.getElementById("logo_canvas");
 const ctx = canvas.getContext("2d");
 
+console.log("1")
 a = window.innerHeight;
 b = window.innerWidth;
-headerHeight = 100
+let headerHeight = 100
+console.log("2",headerHeight)
 if(a>b){headerHeight = Math.max(a,b)/8;}else{headerHeight = Math.max(a,b)/15;}
-
+console.log("3", headerHeight)
 ctx.canvas.width  = headerHeight
 ctx.canvas.height = headerHeight
 
@@ -136,6 +138,6 @@ function handleOrientation(event) {
 }
 
 window.addEventListener('load', function(event){
-    drawModel(model);
+    1;
     }
   );
