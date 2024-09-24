@@ -11,6 +11,9 @@
     padding: 0;
     display: inline-flex;
     background-color: rgb(74, 74, 74);
+    position: fixed;
+    top:0px
+
 }
 canvas {
     display: inline-block;
@@ -23,3 +26,27 @@ canvas {
     min-width: 300px;
     padding-left: 20px;
 }
+table, td {
+    border:1px solid black;
+    margin: auto;
+    margin-top: 10%;
+  }
+td {
+    width: 400px;
+    height:300px;
+}
+
+img{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.cell{
+    margin-top: 5px;
+    text-align: center;
+}
+
+a:link { 
+    text-decoration: none; 
+}
+  
