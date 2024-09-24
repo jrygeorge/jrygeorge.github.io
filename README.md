@@ -1,2 +1,2 @@
-# jrygeorge.github.io
-stuff i've made
+physics and graphics-y things i've made
+
