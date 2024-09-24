@@ -133,6 +133,7 @@ function handleOrientation(event) {
     //alpha/yaw/y
     //beta/pitch/x
     //gamma/roll/z
+    console.log("oof")
     alpha = event.alpha
     beta = event.beta
     gamma = event.gamma
@@ -154,6 +155,7 @@ window.addEventListener('load', function(event){
     // Honestly no clue why the thing is rotating 90 by itself in the first place
     // i must be projecting it wrong? anyway this is a small fix LOL
     //model = rotateAllPoints(model,90,0,0)
+    console.log("LOADED")
     drawModel(model);
     }
   );
