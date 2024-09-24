@@ -28,7 +28,7 @@ heads[0].style.fontSize = headerHeight/5;
 heads[1].style.fontSize = headerHeight/7;
 
 offset = headerHeight / 2;
-scaleFactor = headerHeight/10
+scaleFactor = headerHeight/6
 lineWidth = 1
 
 projectNumber = projectInformation.length;
@@ -67,8 +67,21 @@ ball = {
                 [37,38],[38,39],[39,40],[40,41],[41,42],[42,37] // -3 ring
             ]
 }
+let g = (1 + 5**0.5)/2
+icos = {
+    points : [[0,-1,g],[0,1,g],[g,0,1],[-g,0,1],[-1,-g,0],[-1,g,0],[1,g,0],[1,-g,0],[g,0,-1],[-g,0,-1],[0,-1,-g],[0,1,-g] 
+                ], 
 
-model = ball
+    edges : [[0,1],[0,2],[0,3],[0,4],[0,7],[1,2],[1,3],[1,5],[1,6],[2,6],
+    [2,7],[2,8],[3,4],[3,5],[3,9],[4,9],[4,7],[4,10],[5,9],[5,6],
+    [5,11],[6,11],[6,8],[7,8],[7,10],[8,10],[8,11],[9,10],[9,11],[10,11]
+                
+            ]
+}
+
+
+
+model = icos
 
 function drawModel(mod){
     ctx.canvas.width = ctx.canvas.width;
