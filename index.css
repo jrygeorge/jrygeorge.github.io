@@ -1,0 +1,26 @@
+.header {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: left;
+    color: rgb(204, 204, 204);
+    margin: 0px;
+    word-wrap: break-word;
+}
+#bar {
+    height: 50%;
+    width: 100%;
+    padding: 0;
+    display: inline-flex;
+    background-color: rgb(74, 74, 74);
+}
+canvas {
+    display: inline-block;
+    background-color: rgb(255, 255, 255);
+}
+#heading_container {
+    height: 100%;
+    vertical-align:top;
+    padding: 0%;
+    min-width: 300px;
+    padding-left: 10px;
+
+}
