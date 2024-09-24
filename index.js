@@ -1,19 +1,3 @@
-const canvas = document.getElementById("logo_canvas");
-const ctx = canvas.getContext("2d");
-
-a = window.innerHeight;
-b = window.innerWidth;
-headerHeight = 100
-if(a>b){headerHeight = Math.max(a,b)/7;}else{headerHeight = Math.max(a,b)/15;}
-
-ctx.canvas.width  = headerHeight
-ctx.canvas.height = headerHeight
-
-document.getElementById("bar").style.height = headerHeight
-heads  = document.getElementsByClassName("header")
-heads[0].style.fontSize = headerHeight/5;
-heads[1].style.fontSize = headerHeight/7;
-
 offset = headerHeight / 2;
 scaleFactor = headerHeight/10
 lineWidth = 1
@@ -120,42 +104,38 @@ function quaternionRotation(point,alpha,beta,gamma){
     ansQ = quaternionMultiplication(quaternionMultiplication(quaternionInversion(rotationQuaternion),p),rotationQuaternion);
 
     return [ansQ[1],ansQ[2],ansQ[3]];
-
 }
 
 
 window.addEventListener("deviceorientation", handleOrientation, true);
 function handleOrientation(event) {
-    //let absolute = event.absolute;
-    // alpha SPINNING ON TABLE goes 0 - 360 -> 0
-    // beta LIFTING TOWARDS YOUR FACE goes flat: 0 - 90 (portrait) - 180 (upside down) -> -180 - 0
-    // gamma FLIPPING SIDEWAYS goes leftfacing: -90 - 0 - 90 -> -90 - 0 (upside down) - 90 -> -90 (left facing again)
-    //alpha/yaw/y
-    //beta/pitch/x
-    //gamma/roll/z
-    console.log("oof")
     alpha = event.alpha
     beta = event.beta
     gamma = event.gamma
-    //if(beta < 180){beta = 180+180+beta;} // actually dont think this is needed coz of the mod later
-    //if(gamma<0){alpha +=180;beta+=180;}
-
     zAngle  = (alpha + 360)%360
     xAngle   = (beta + 360)%360 //-90 inside
     yAngle   = (gamma + 360)%360
-
-    console.log(alpha,beta,gamma)
-
     modelCopy = JSON.parse(JSON.stringify(model));
     drawModel(rotateAllPoints(modelCopy,xAngle,yAngle,zAngle))
 }
 
 window.addEventListener('load', function(event){
-    // flip it around to start
-    // Honestly no clue why the thing is rotating 90 by itself in the first place
-    // i must be projecting it wrong? anyway this is a small fix LOL
-    //model = rotateAllPoints(model,90,0,0)
-    console.log("LOADED")
+    const canvas = document.getElementById("logo_canvas");
+    const ctx = canvas.getContext("2d");
+
+    a = window.innerHeight;
+    b = window.innerWidth;
+    headerHeight = 100
+    if(a>b){headerHeight = Math.max(a,b)/8;}else{headerHeight = Math.max(a,b)/15;}
+
+    ctx.canvas.width  = headerHeight
+    ctx.canvas.height = headerHeight
+
+    document.getElementById("bar").style.height = headerHeight
+    heads  = document.getElementsByClassName("header")
+    heads[0].style.fontSize = headerHeight/5;
+    heads[1].style.fontSize = headerHeight/7;
+
     drawModel(model);
     }
   );
