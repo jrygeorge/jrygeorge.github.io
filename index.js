@@ -159,7 +159,7 @@ function handleOrientation(event) {
 }
 
 // GENERATING TABLE
-projectNumber = 20//projectInformation.length;
+projectNumber = projectInformation.length;
 columnNumber = Math.floor(window.innerWidth/400);
 rowNumber = Math.ceil(projectNumber/columnNumber);
 //
