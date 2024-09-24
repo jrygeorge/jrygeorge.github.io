@@ -173,8 +173,7 @@ for(let row = 0; row<rowNumber;row++){
             const td = tr.insertCell()
             const cellDiv = document.createElement("a");
             cellDiv.className = "cellDiv"
-            cellDiv.setAttribute("href","https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg/1200px-Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg")
-
+            cellDiv.setAttribute("href","projects/"+projectInformation[currProject-1]["filename"])
             const thumb =  document.createElement("img");
             thumb.setAttribute("src","assets/"+projectInformation[currProject-1]["image"])
 
