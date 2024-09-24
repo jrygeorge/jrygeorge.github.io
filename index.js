@@ -143,6 +143,8 @@ function handleOrientation(event) {
     xAngle   = (beta + 360)%360 //-90 inside
     yAngle   = (gamma + 360)%360
 
+    console.log(alpha,beta,gamma)
+
     modelCopy = JSON.parse(JSON.stringify(model));
     drawModel(rotateAllPoints(modelCopy,xAngle,yAngle,zAngle))
 }
