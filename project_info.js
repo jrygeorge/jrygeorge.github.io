@@ -10,5 +10,11 @@ projectInformation = [
         description:"Rotate a cow. WASDQE to control. Best used on mobile.",
         filename:"cow-rotator.html",
         image:"cow.gif"
+    },
+    {
+        name:"Marching Squares",
+        description:"Marching Squares with a cool rainbow gradient.",
+        filename:"marching_squares.html",
+        image:""
     }
 ]
