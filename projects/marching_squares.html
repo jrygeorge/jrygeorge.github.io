@@ -2,7 +2,7 @@
     <title>Marching Squares 🌈</title>
 </head>
 <body style="background-color:rgb(0, 0, 0); margin: 0px; height: 100%; width: 100%;">
-    <canvas id="canvas" width="100" height="500" style="margin: 0px; background-color: blue;">OOPS</canvas>
+    <canvas id="canvas" width="100" height="500" style="margin: 0px;">OOPS</canvas>
 </body>    
 <script>
 
@@ -235,31 +235,13 @@ for(let r=0;r<R+1;r++){
     }
 }
 
-document.body.addEventListener("mousemove", function (e) {
-    controllerX = e.clientX;
-    controllerY = e.clientY;
-    checkLocationAndDraw();  
-})
-
-document.addEventListener('keydown', function(event){
-    keyStep = 3
-    if ((controllerX === null) && ["w","a","s","d","ArrowUp","ArrowRight","ArrowDown","ArrowLeft"].includes(event.key)){
-    controllerX = offsetX + blockSize;
-    controllerY = offsetY + blockSize;
-    }
-    // maxs and mins are there so we don't go out of bounds
-    controllerY = Math.min(Math.max(controllerY + ({"w":-keyStep,"ArrowUp":-keyStep,"s":keyStep,"ArrowDown":keyStep}[event.key]||0),offsetY),ctx.canvas.height-offsetY);
-    controllerX = Math.min(Math.max(controllerX + ({"a":-keyStep,"ArrowLeft":-keyStep,"d":keyStep,"ArrowRight":keyStep}[event.key]||0),offsetX),ctx.canvas.width-offsetX);
-    checkLocationAndDraw();
-} );
-
-function checkLocationAndDraw(){
-    if (inTargetZone(controllerX,controllerY)){ 
+function checkLocationAndDraw(X,Y){
+    if (inTargetZone(X,Y)){ 
         // Target Square is actual a square of side blockSize, centred around the point
         // However we can only reach this part of the code if safe() is true
         // the effective Target square is a diamond with diagonal of size blockSize, centered around the point
-        targetX = Math.floor((controllerX-offsetX+blockSize/2)/(blockSize))
-        targetY = Math.floor((controllerY-offsetY+blockSize/2)/(blockSize))
+        targetX = Math.floor((X-offsetX+blockSize/2)/(blockSize))
+        targetY = Math.floor((Y-offsetY+blockSize/2)/(blockSize))
         // update the Target in the pointArray
         pointsArray[targetY][targetX] = 1;
         // then update the necessary cells in cellsArray
@@ -288,4 +270,38 @@ function inTargetZone(x,y){
     */
     return !outsideOfBorder && (condition1 || condition2)
 }
+
+document.body.addEventListener("mousemove", function (event) {
+    controllerX = event.clientX;
+    controllerY = event.clientY;
+    checkLocationAndDraw(controllerX,controllerY);  
+})
+
+document.addEventListener('keydown', function(event){
+    keyStep = 3
+    if ((controllerX === null) && ["w","a","s","d","ArrowUp","ArrowRight","ArrowDown","ArrowLeft"].includes(event.key)){
+    controllerX = offsetX + blockSize;
+    controllerY = offsetY + blockSize;
+    }
+    // maxs and mins are there so we don't go out of bounds
+    controllerY = Math.min(Math.max(controllerY + ({"w":-keyStep,"ArrowUp":-keyStep,"s":keyStep,"ArrowDown":keyStep}[event.key]||0),offsetY),ctx.canvas.height-offsetY);
+    controllerX = Math.min(Math.max(controllerX + ({"a":-keyStep,"ArrowLeft":-keyStep,"d":keyStep,"ArrowRight":keyStep}[event.key]||0),offsetX),ctx.canvas.width-offsetX);
+    checkLocationAndDraw(controllerX,controllerY);
+});
+
+document.addEventListener("touchstart", function(event){
+    const touches = event.changedTouches;
+    for (let i = 0; i < touches.length; i++) {
+    checkLocationAndDraw(touches[i].pageX,touches[i].pageY)
+    }
+});
+
+document.addEventListener("touchmove", function(event){
+    const touches = event.changedTouches;
+    for (let i = 0; i < touches.length; i++) {
+    checkLocationAndDraw(touches[i].pageX,touches[i].pageY)
+    }
+});
+
+
 </script>
