@@ -290,7 +290,7 @@ document.addEventListener('keydown', function(event){
 });
 
 document.addEventListener("touchstart", function(event){
-    eventt.preventDefault()
+    event.preventDefault()
     const touches = event.changedTouches;
     for (let i = 0; i < touches.length; i++) {
     checkLocationAndDraw(touches[i].pageX,touches[i].pageY)
