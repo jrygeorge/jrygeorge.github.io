@@ -15,6 +15,6 @@ projectInformation = [
         name:"Marching Squares",
         description:"Marching Squares with a cool rainbow gradient.",
         filename:"marching_squares.html",
-        image:""
+        image:"rainbow_squares.png"
     }
 ]
