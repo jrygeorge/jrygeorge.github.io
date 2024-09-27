@@ -130,6 +130,7 @@ for(let row = 0; row<rowNumber;row++){
             const cellDiv = document.createElement("a");
             cellDiv.className = "cellDiv"
             cellDiv.setAttribute("href","projects/"+projectInformation[currProject-1]["filename"])
+            cellDiv.setAttribute("target","_blank")
             const thumb =  document.createElement("img");
             thumb.setAttribute("src","assets/"+projectInformation[currProject-1]["image"])
 

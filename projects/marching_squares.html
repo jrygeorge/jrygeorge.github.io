@@ -54,7 +54,7 @@ for(let r=0;r<R+1;r++){
 
 function reDrawCell(r,c){
     hue = Math.floor(c/C * 360);
-    saturation = 100 - (r/R * 80) + 20; // Saturation from 20 - 100%
+    saturation = 100 - (r/R * 80) // Saturation from 20 - 100%
     HSL = "HSL("+hue+","+saturation+"%,50%)";
     cellsArray[r][c] = computeState(r,c);
     ctx.fillStyle = HSL;
