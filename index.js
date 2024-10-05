@@ -1,10 +1,9 @@
 const canvas = document.getElementById("logo_canvas");
 const ctx = canvas.getContext("2d");
 
-
 a = window.innerHeight;
 b = window.innerWidth;
-let headerHeight = 100
+
 
 /*
 Stolen from the first answer from https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
@@ -16,6 +15,7 @@ window.mobileAndTabletCheck = function() {
     return check;
   };
 
+let headerHeight = 1
 
 if(a>b){headerHeight = Math.max(a,b)/8;}else{headerHeight = Math.max(a,b)/15;}
 ctx.canvas.width  = headerHeight
@@ -26,130 +26,81 @@ heads  = document.getElementsByClassName("header")
 heads[0].style.fontSize = headerHeight/5;
 heads[1].style.fontSize = headerHeight/7;
 
-offset = headerHeight / 2;
+offsetX = ctx.canvas.width / 2;
+offsetY = ctx.canvas.height / 2;
 scaleFactor = headerHeight/5
 lineWidth = 1
+let angleStep = 3 // in degrees
+
+wasdqe = false
 
 model = icos
-model = rotateAllPoints(model,30,30,45)
 
-function drawModel(mod){
-    ctx.canvas.width = ctx.canvas.width;
-    for(let i=0;i<mod.edges.length;i++){
-        
-        side = mod.edges[i];
-        point0 = mod.points[side[0]]; point1 = mod.points[side[1]];
-        
-        x0=point0[0]*scaleFactor;y0=point0[1]*scaleFactor;
-        x1=point1[0]*scaleFactor;y1=point1[1]*scaleFactor;
-        
-        ctx.moveTo(x0+offset,y0+offset);
-        ctx.lineTo(x1+offset,y1+offset);
-        ctx.lineWidth = lineWidth;
-
-        ctx.stroke();
-    }
+function updateLogo(){
+    model = rotateAllPoints
+                (model,
+                Math.random()*angleStep,  
+                Math.random()*angleStep,
+                Math.random()*angleStep)
+    drawModel(model,false)
+    requestAnimationFrame(updateLogo)
 }
+requestAnimationFrame(updateLogo)
 
-function rotateAllPoints(obj,x,y,z){
-    /*
-    x *= Math.PI/180;
-    y *= Math.PI/180;
-    z *= Math.PI/180;*/
-
-    for(let i=0;i<obj.points.length;i++){
-        obj.points[i] = quaternionRotation(obj.points[i],y,x,z)
-        /*
-        pointT = [[obj.points[i][0]],[obj.points[i][1]],[obj.points[i][2]]]
-        resultT = matrixMultiplication(generateRotationMatrix(x,y,z),pointT);
-        obj.points[i] = [resultT[0][0],resultT[1][0],resultT[2][0]];*/
-
-    }
-    return obj
-}
-
-
-function quaternionMultiplication(A,B){
-    if ((A.length != 4 )||(B.length != 4)){throw new Error("Invalid quaternions :(");}
-    let t0 = A[0]*B[0] - A[1]*B[1] - A[2]*B[2] - A[3]*B[3];
-    let t1 = A[0]*B[1] + A[1]*B[0] - A[2]*B[3] + A[3]*B[2];
-    let t2 = A[0]*B[2] + A[1]*B[3] + A[2]*B[0] - A[3]*B[1];
-    let t3 = A[0]*B[3] - A[1]*B[2] + A[2]*B[1] + A[3]*B[0];
-    return [t0,t1,t2,t3];
-}
-
-function quaternionInversion(A){
-    if (A.length != 4 ){throw new Error("Invalid quaternion :(");}
-    return [A[0],-A[1],-A[2],-A[3]];
-}
-
-function quaternionRotation(point,alpha,beta,gamma){
-    let uby2 = gamma * (Math.PI/180)/ 2 ;
-    let vby2 = beta * (Math.PI/180)/ 2 ;
-    let wby2 = alpha * (Math.PI/180)/ 2 ;
-
-    let q0 = Math.cos(uby2)*Math.cos(vby2)*Math.cos(wby2) + Math.sin(uby2)*Math.sin(vby2)*Math.sin(wby2)
-    let q1 = Math.sin(uby2)*Math.cos(vby2)*Math.cos(wby2) - Math.cos(uby2)*Math.sin(vby2)*Math.sin(wby2)
-    let q2 = Math.cos(uby2)*Math.sin(vby2)*Math.cos(wby2) + Math.sin(uby2)*Math.cos(vby2)*Math.sin(wby2)
-    let q3 = Math.cos(uby2)*Math.cos(vby2)*Math.sin(wby2) - Math.sin(uby2)*Math.sin(vby2)*Math.cos(wby2)
-
-    rotationQuaternion = [q0,q1,q2,q3];
-    p = [0,point[0],point[1],point[2]];
-
-    ansQ = quaternionMultiplication(quaternionMultiplication(quaternionInversion(rotationQuaternion),p),rotationQuaternion);
-
-    return [ansQ[1],ansQ[2],ansQ[3]];
-}
-
-
-window.addEventListener("deviceorientation", handleOrientation, true);
-function handleOrientation(event) {
-    alpha = event.alpha
-    beta = event.beta
-    gamma = event.gamma
-    zAngle  = (alpha + 360)%360
-    xAngle   = (beta + 360)%360 //-90 inside
-    yAngle   = (gamma + 360)%360
-    modelCopy = JSON.parse(JSON.stringify(model));
-    drawModel(rotateAllPoints(modelCopy,zAngle,yAngle,xAngle))
-}
 
 // GENERATING TABLE
 projectNumber = projectInformation.length;
-columnNumber = Math.floor(window.innerWidth/600);
-rowNumber = Math.ceil(projectNumber/columnNumber);
-//
 
-const projecttable = document.createElement("table");
-for(let row = 0; row<rowNumber;row++){
-    const tr = projecttable.insertRow()
-    for(let col = 0; col < columnNumber; col++){
-        currProject = (row*columnNumber)+col + 1;
-        if(currProject <= projectNumber){
-            const td = tr.insertCell()
-            const cellDiv = document.createElement("a");
-            cellDiv.className = "cellDiv"
-            cellDiv.setAttribute("href","projects/"+projectInformation[currProject-1]["filename"])
-            cellDiv.setAttribute("target","_blank")
-            const thumb =  document.createElement("img");
-            thumb.setAttribute("src","assets/"+projectInformation[currProject-1]["image"])
+// width of a project cell + its margins
+cellWidth = 600
+// padding added to the table div so the cells are centred
+tablePadding = ((0.9*document.body.offsetWidth)%(cellWidth))
 
-            let head3 = document.createElement("h3");
-            let head4 = document.createElement("h4");
-            head4.className = "header cell"
-            head3.className = "header cell" 
+const projecttable = document.createElement("div")
+projecttable.id = "table_div"
+// there must be a better way to centre it, but this is all I know hoho
+projecttable.style.paddingLeft = tablePadding/2
+projecttable.style.width = (0.90*document.body.offsetWidth) - tablePadding /2
 
-            const projectName = document.createTextNode(projectInformation[currProject-1]["name"]);
-            const projectDescription = document.createTextNode(projectInformation[currProject-1]["description"]);
-            head3.appendChild(projectName)
-            head4.appendChild(projectDescription)
-            cellDiv.appendChild(thumb)
-            cellDiv.appendChild(head3)
-            cellDiv.appendChild(head4)
-            
-            td.appendChild(cellDiv);
-        }
-    }
+projecttable.style.marginTop = headerHeight
+
+for(let i=0;i<projectNumber;i++){
+    cellDiv = document.createElement("div")
+    cellDiv.className = "table_cell"
+
+    // putting an "a" inside the div so we can add the href
+    const cell = document.createElement("a");
+    cell.className = "cellDiv"
+    cell.setAttribute("href","projects/"+projectInformation[i]["filename"])
+    cell.setAttribute("target","_blank")
+    const thumb =  document.createElement("img");
+    thumb.setAttribute("src","assets/"+projectInformation[i]["image"])
+    cell.appendChild(thumb)
+
+    
+    let head3 = document.createElement("h3");
+    head3.className = "header cell"
+    head3.style.textAlign = "center"
+    head3.style.marginTop = "10px"
+
+    const projecttn = document.createTextNode(projectInformation[i]["name"]);
+    head3.appendChild(projecttn)
+
+    let head4 = document.createElement("h4");
+    head4.className = "header cell"
+    head4.style.textAlign = "center"
+    head4.style.marginTop = "10px"
+
+    const projectDescription = document.createTextNode(projectInformation[i]["description"]);
+    head4.appendChild(projectDescription)
+        
+
+
+    cell.appendChild(head3)
+    cell.appendChild(head4)
+
+    cellDiv.appendChild(cell)
+    projecttable.appendChild(cellDiv)
 }
 document.body.appendChild(projecttable)
 
