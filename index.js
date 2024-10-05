@@ -106,5 +106,4 @@ document.body.appendChild(projecttable)
 
 if(window.mobileAndTabletCheck()){
     document.getElementsByTagName("h4")[0].textContent = "just some physics and graphics-y things";
-    document.getElementsByTagName("table")[0].style.marginTop = "25%"
 }
