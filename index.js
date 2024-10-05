@@ -45,7 +45,6 @@ function updateLogo(){
     drawModel(model,false)
     requestAnimationFrame(updateLogo)
 }
-requestAnimationFrame(updateLogo)
 
 
 // GENERATING TABLE
@@ -106,4 +105,7 @@ document.body.appendChild(projecttable)
 
 if(window.mobileAndTabletCheck()){
     document.getElementsByTagName("h4")[0].textContent = "just some physics and graphics-y things";
+}
+else{
+    requestAnimationFrame(updateLogo)
 }
