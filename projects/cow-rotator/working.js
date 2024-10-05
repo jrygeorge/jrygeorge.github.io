@@ -1,8 +1,10 @@
 
-function drawModel(mod){
+function drawModel(mod,origin=true){
     ctx.canvas.width = ctx.canvas.width;
-    ctx.fillStyle = "red"
-    ctx.fillRect(offsetX-2,offsetY-2,4,4)
+    if(origin){ // if we're drawing the red dot at the centre
+        ctx.fillStyle = "red"
+        ctx.fillRect(offsetX-2,offsetY-2,4,4)
+    }
     for(let i=0;i<mod.edges.length;i++){
         
         side = mod.edges[i];
@@ -30,9 +32,7 @@ function rotateAllPoints(obj,x,y,z){
         pointT = [[obj.points[i][0]],[obj.points[i][1]],[obj.points[i][2]]]
         resultT = matrixMultiplication(generateRotationMatrix(x,y,z),pointT);
         obj.points[i] = [resultT[0][0],resultT[1][0],resultT[2][0]];*/
-
     }
-    
     return obj
 }
 
@@ -130,6 +130,8 @@ document.body.addEventListener("mousemove", function (e) {
 
 
 document.addEventListener('keydown', function(event){
+
+    if (wasdqe){ // if wasdqe controls are active
     
     if (["a","d"].includes(event.key)){
         yAngle += {"a":angleStep,"d":-angleStep}[event.key];
@@ -142,13 +144,15 @@ document.addEventListener('keydown', function(event){
     }
     modelCopy = JSON.parse(JSON.stringify(model));
     drawModel(rotateAllPoints(modelCopy,xAngle,yAngle,zAngle))
+
+}
 })
 
 window.addEventListener('load', function(event){
     // flip it around to start
     // Honestly no clue why the thing is rotating 90 by itself in the first place
     // i must be projecting it wrong? anyway this is a small fix LOL
-    //model = rotateAllPoints(model,90,0,0)
+    model = rotateAllPoints(model,20,20,0)
     drawModel(model);
     }
   );
