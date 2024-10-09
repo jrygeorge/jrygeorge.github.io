@@ -94,8 +94,8 @@ Player = {
         this.ai = (this.left)*(-1) + (this.right)*(1)
         this.aj = (this.up)*(-1) + (this.down)*(1)
     },
-    vmag:10,
-    step:10
+    acc:10,
+    vel:10
 }
 
 gridcanv = document.getElementById("grid");
@@ -123,17 +123,26 @@ function updateScreen(){
     newTime = performance.now();
     timeElapsed = newTime - previousTime; // in milliseconds
     previousTime = newTime;
+    // Not sure why this uses object variable (i think that what its called?)
+    // I could just use local variable in this function, but thats how it is
     Player.updateAccereleration()
+
+    // if we're moving just up,down,left or right, increase V by one unit
+    // if we're moving diagonally increase by V/sqrt(2)
+    // this stops us moving faster diagonally
+    normalisationFactor = 1
+
+    if(Player.ai && Player.aj){normalisationFactor=1/(2**0.5)}else{normalisationFactor=1}
+
     // updating v
-    Player.vi += Player.ai * Player.vmag * timeElapsed/1000
-    Player.vj += Player.aj * Player.vmag * timeElapsed/1000
+    Player.vi += Player.ai * Player.acc * timeElapsed/1000 * normalisationFactor
+    Player.vj += Player.aj * Player.acc * timeElapsed/1000 * normalisationFactor
     // updating x,y location
-    Player.di += Player.vi * Player.step * timeElapsed/1000
-    Player.dj += Player.vj * Player.step * timeElapsed/1000
+    Player.di += Player.vi * Player.vel * timeElapsed/1000
+    Player.dj += Player.vj * Player.vel * timeElapsed/1000
     // containing x,y location within canvas
     Player.di = Math.max(Math.min(Player.di,500),-500)
     Player.dj = Math.max(Math.min(Player.dj,250),-250)
-    console.log(Player)
     currentColour = (currentColour + 2)%360
     ctx.fillStyle = `HSL(${currentColour},100%,50%)`
     ctx.fillRect(500+Player.di-4,250+Player.dj-4,8,8)
