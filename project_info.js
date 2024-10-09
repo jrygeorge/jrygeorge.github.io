@@ -21,6 +21,6 @@ projectInformation = [
         name:"Multi-Key + Acceleration Demo",
         description:"Small demo with realistic vel + acc that supports multiple keypresses.",
         filename:"multi-key.html",
-        image:"rainbow_squares.png"
+        image:"multikeydemo.jpg"
     }
 ]
