@@ -1,0 +1,196 @@
+<head>
+    <title>Multi-Key + Acceleration Demo</title>
+</head>
+
+<style>
+
+    .container {
+    width: 1000px;
+    height: 500px;
+    margin: 0 auto;
+    border-color: black;
+    border-style: groove;
+    display: grid;
+    place-items: center;
+    grid-template-areas: "inner-div";
+    }
+    .inner {
+    height: 500px;
+    width: 1000px;
+    grid-area: inner-div;
+    }
+
+    table{
+        width: 120;
+        height: 120;
+        margin: auto;
+        margin-top: 1%
+    }
+    td{
+        width: 40;
+        height:40;
+    }
+    #space{
+        text-align: center;
+        font-size: small;
+
+    }
+    .key{
+        border-color: black;
+        border-style: groove;
+    }
+
+</style>
+<h4 style="text-align: center; margin: 0px;">WASD + SPACE to break</h3>
+<body style="background-color: rgb(252, 249, 245);">
+<!-- 
+stacking two canvases taken from : https://stackoverflow.com/a/64047736
+-->
+<div class="container">
+    <div class="inner">
+        <canvas id="grid" width = "1000" height="500">ERROR</canvas>
+    </div>
+    <div class="inner">
+        <canvas id="vehicle" width = "1000" height="500">ERROR</canvas>
+    </div>
+</div>
+
+<table>
+    <tr>
+        <td></td>
+        <td id="w" class="key"></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td id="a" class="key"></td>
+        <td id="space"></td>
+        <td id="d" class="key"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td id="s" class="key"></td>
+        <td></td>
+    </tr>
+</table>
+
+<script>
+
+
+previousTime = performance.now()
+timeElapsed = null
+
+Player = {
+    di:0,
+    dj:0,
+    vi:0,
+    vj:0,
+    ai:0,
+    aj:0,
+    left:false,
+    right:false,
+    up:false,
+    down:false,
+    updateAccereleration:function(){
+        this.ai = (this.left)*(-1) + (this.right)*(1)
+        this.aj = (this.up)*(-1) + (this.down)*(1)
+    },
+    vmag:10,
+    step:10
+}
+
+gridcanv = document.getElementById("grid");
+gridctx = gridcanv.getContext("2d");
+// vertical lines
+for (let i=1;i<20;i++){
+    gridctx.beginPath();
+    gridctx.moveTo(i*50,0)
+    gridctx.lineTo(i*50,500);
+    gridctx.stroke()
+}
+// horizontal lines
+for (let i=1;i<10;i++){
+    gridctx.beginPath();
+    gridctx.moveTo(0,i*50)
+    gridctx.lineTo(1000,i*50);
+    gridctx.stroke()
+}
+
+canv = document.getElementById("vehicle");
+ctx = canv.getContext("2d")
+currentColour = 450
+
+function updateScreen(){
+    newTime = performance.now();
+    timeElapsed = newTime - previousTime; // in milliseconds
+    previousTime = newTime;
+    Player.updateAccereleration()
+    // updating v
+    Player.vi += Player.ai * Player.vmag * timeElapsed/1000
+    Player.vj += Player.aj * Player.vmag * timeElapsed/1000
+    // updating x,y location
+    Player.di += Player.vi * Player.step * timeElapsed/1000
+    Player.dj += Player.vj * Player.step * timeElapsed/1000
+    // containing x,y location within canvas
+    Player.di = Math.max(Math.min(Player.di,500),-500)
+    Player.dj = Math.max(Math.min(Player.dj,250),-250)
+    console.log(Player)
+    currentColour = (currentColour + 2)%360
+    ctx.fillStyle = `HSL(${currentColour},100%,50%)`
+    ctx.fillRect(500+Player.di-4,250+Player.dj-4,8,8)
+    document.getElementById("space").innerText = `x : ${(Player.di)|0}\ny: ${(Player.dj)|0}`
+    requestAnimationFrame(updateScreen);
+}
+requestAnimationFrame(updateScreen)
+
+document.addEventListener("keydown",function(event){
+    switch(event.keyCode){
+        case 87: // W
+            document.getElementById(event.key).style.backgroundColor = "red";
+            Player.up = true;
+            break;
+        case 65: // A
+            document.getElementById(event.key).style.backgroundColor = "red";
+            Player.left = true;
+            break;
+        case 68: // D
+            document.getElementById(event.key).style.backgroundColor = "red";
+            Player.right = true;
+            break;
+        case 83: // S
+            document.getElementById(event.key).style.backgroundColor = "red";
+            Player.down = true;
+            break;
+        case 32:
+            document.getElementById("space").style.backgroundColor = "red";
+            Player.vi = Player.vi/2 | 0; // half and round to zero
+            Player.vj = Player.vj/2 | 0;
+            break;   
+    }
+})
+
+document.addEventListener("keyup",function(event){
+    switch(event.keyCode){
+        case 87:
+            document.getElementById(event.key).style.backgroundColor = "";
+            Player.up = false;
+            break;
+        case 65:
+            document.getElementById(event.key).style.backgroundColor = "";
+            Player.left = false;
+            break;
+        case 68:
+            document.getElementById(event.key).style.backgroundColor = "";
+            Player.right = false;
+            break;
+        case 83:
+            document.getElementById(event.key).style.backgroundColor = "";
+            Player.down = false;
+            break;
+        case 32:
+            document.getElementById("space").style.backgroundColor = "";
+            break;   
+    }
+})
+
+</script>
+</body>
