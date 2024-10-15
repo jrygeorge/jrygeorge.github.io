@@ -163,10 +163,12 @@ class Cow {
             [[vc[8],vc[41],vc[40],vc[24]],this.shapeColour], //front
             //sides
             [[vc[13],vc[43],vc[41],vc[8]],this.shapeColour],
-            [[vc[29],vc[42],vc[40],vc[24]],this.shapeColour]
+            [[vc[29],vc[42],vc[40],vc[24]],this.shapeColour],
             //[13,43],[29,42], // ontop-back line to thighring2 and 4
             //[8,41],[24,40],// ontop-front line to thighring1 and 3
             //44,45],[46,47]// butt
+            [[vc[40],vc[38],vc[36],vc[35],vc[33], vc[24]],this.shapeColour],//necksides
+            [[vc[41],vc[39],vc[37],vc[34],vc[32], vc[8]],this.shapeColour]
         ]
 }
 }
