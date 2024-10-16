@@ -61,7 +61,7 @@ class UVSphere {
                 this.faces.push([ [v0,v2,v3], this.shapeColour ])
             }
         }
-        this.colours = [...Array(this.faces.length)].fill(randomHSLString())
+        //this.colours = [...Array(this.faces.length)].fill(randomHSLString())
     }
 }
 

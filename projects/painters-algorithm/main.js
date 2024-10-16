@@ -22,15 +22,15 @@ shapeList.push(new Cow(4))
 
 const Camera = {
     LOCATION : {X:0,Y:0,Z:0},
-    ANGLE :0,
+    ANGLE : {X:0,Y:0,Z:0},
     FOV: Math.PI/2.5,
     movementStep : 30,
-    angleStep : 0.1
+    angleStep : 0.02
 }
 
 function moveAroundCamera(face){
     // How much a body should be rotated + translated when moving the camera
-    return translate(face,Camera.LOCATION.X,Camera.LOCATION.Y,-Camera.LOCATION.Z)
+    return rotateXYZ(translate(face,Camera.LOCATION.X,Camera.LOCATION.Y,-Camera.LOCATION.Z),Camera.ANGLE.X,Camera.ANGLE.Y,Camera.ANGLE.Z)
 }
 
 
@@ -119,14 +119,26 @@ requestAnimationFrame(step)
 document.addEventListener("keydown",function(event){
     fov =  Math.round(Camera.FOV * 180 / Math.PI * 100) / 100 ;
     switch(event.key){
-        case "w":   Camera.LOCATION.Z += Camera.movementStep; break;       
-        case "s":   Camera.LOCATION.Z -= Camera.movementStep; break;
-        case "a":   Camera.LOCATION.X -= Camera.movementStep; break;
-        case "d":   Camera.LOCATION.X += Camera.movementStep; break;
-        case "r":   Camera.LOCATION.Y += Camera.movementStep; break;
-        case "f":   Camera.LOCATION.Y -= Camera.movementStep; break;
-        case "t":   Camera.FOV += 0.01; inst.textContent = `WS - AD - RF to move, TG to change FOV(${fov} deg)`; break;
-        case "g":   Camera.FOV -= 0.01; inst.textContent = `WS - AD - RF to move, TG to change FOV(${fov} deg)`; break;
+        case "w":   Camera.LOCATION.Z += Camera.movementStep * Math.cos(Camera.ANGLE.Y);
+                    Camera.LOCATION.X -= Camera.movementStep * Math.sin(Camera.ANGLE.Y);
+                    break;     
+        case "s":   Camera.LOCATION.Z -= Camera.movementStep * Math.cos(Camera.ANGLE.Y);
+                    Camera.LOCATION.X += Camera.movementStep * Math.sin(Camera.ANGLE.Y);
+                    break;
+        case "a":   Camera.LOCATION.Z += Camera.movementStep * Math.cos(Math.PI/2 + Camera.ANGLE.Y);
+                    Camera.LOCATION.X -= Camera.movementStep * Math.sin(Math.PI/2 + Camera.ANGLE.Y);
+                    break;
+        case "d":   Camera.LOCATION.Z -= Camera.movementStep * Math.cos(Math.PI/2 + Camera.ANGLE.Y);
+                    Camera.LOCATION.X += Camera.movementStep * Math.sin(Math.PI/2 + Camera.ANGLE.Y);
+                    break;
+        case "r":   Camera.LOCATION.Y += Camera.movementStep ; break;
+        case "f":   Camera.LOCATION.Y -= Camera.movementStep ; break;
+
+        case "q":   Camera.ANGLE.Y = (Camera.ANGLE.Y + Camera.angleStep)%(2*Math.PI); break;
+        case "e":   Camera.ANGLE.Y = (Camera.ANGLE.Y - Camera.angleStep)%(2*Math.PI); break;
+
+        case "t":   Camera.FOV += 0.01; inst.textContent = `WS - AD - RF to move | QE to turn head | TG to change FOV (${fov} deg)`; break;
+        case "g":   Camera.FOV -= 0.01; inst.textContent = `WS - AD - RF to move | QE to turn head | TG to change FOV (${fov} deg)`; break;
           
     }
 })
