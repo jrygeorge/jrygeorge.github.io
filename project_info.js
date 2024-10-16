@@ -6,6 +6,12 @@ projectInformation = [
         image:"maze_demo.gif"
     },
     {
+        name:"Painter's Algorithm",
+        description:"Small demo showing painters algo + perspective projection",
+        filename:"painters-algorithm/painter.html",
+        image:"painters_sphere.png"
+    },
+    {
         name:"Cow Rotator",
         description:"Rotate a cow. WASDQE to control. Best used on mobile.",
         filename:"cow-rotator.html",
