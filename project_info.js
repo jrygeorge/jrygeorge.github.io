@@ -3,7 +3,7 @@ projectInformation = [
         name:"Maze Escape Raycaster",
         description:"Small maze game that works with raycasting.",
         filename:"maze.html",
-        image:"maze_demo.gif"
+        image:"maze.png"
     },
     {
         name:"Painter's Algorithm",
@@ -15,7 +15,7 @@ projectInformation = [
         name:"Cow Rotator",
         description:"Rotate a cow. WASDQE to control. Best used on mobile.",
         filename:"cow-rotator.html",
-        image:"cow.gif"
+        image:"cow.png"
     },
     {
         name:"Marching Squares",
@@ -27,6 +27,6 @@ projectInformation = [
         name:"Multi-Key + Acceleration Demo",
         description:"Small demo with realistic vel + acc that supports multiple keypresses.",
         filename:"multi-key.html",
-        image:"multikeydemo.jpg"
+        image:"multikeydemo.png"
     }
 ]
