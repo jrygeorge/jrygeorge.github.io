@@ -172,3 +172,32 @@ class Cow {
         ]
 }
 }
+
+
+class Torus {
+    constructor(crossSectionRadius,aspectRatio){
+        if(crossSectionRadius <= 0){
+            throw new Error(`Inner Radius must be > 0. Value given : ${crossSectionRadius}`)
+        }
+        if(aspectRatio < 1){
+            throw new Error(`Aspect Ratio must be >= 1. Value given : ${aspectRatio}`)
+        }
+        this.faces = []
+        this.shapeColour = randomHSLString()
+        let sweepRadius = crossSectionRadius * aspectRatio
+        console.log(crossSectionRadius,sweepRadius)
+        // I should probably have two step angles
+        const step = Math.PI/10
+        for(let phi=0;phi<Math.PI * 2; phi += step){
+            for(let theta=0;theta<Math.PI *2; theta += step){
+                let v0 = [(sweepRadius + crossSectionRadius*Math.cos(theta))*Math.cos(phi),(sweepRadius + crossSectionRadius*Math.cos(theta))*Math.sin(phi),crossSectionRadius*Math.sin(theta),1]
+                let v1 = [(sweepRadius + crossSectionRadius*Math.cos(theta+step))*Math.cos(phi),(sweepRadius + crossSectionRadius*Math.cos(theta+step))*Math.sin(phi),crossSectionRadius*Math.sin(theta+step),1]
+                let v2 = [(sweepRadius + crossSectionRadius*Math.cos(theta+step))*Math.cos(phi+step),(sweepRadius + crossSectionRadius*Math.cos(theta+step))*Math.sin(phi+step),crossSectionRadius*Math.sin(theta+step),1]
+                let v3 = [(sweepRadius + crossSectionRadius*Math.cos(theta))*Math.cos(phi+step),(sweepRadius + crossSectionRadius*Math.cos(theta))*Math.sin(phi+step),crossSectionRadius*Math.sin(theta),1]
+
+                this.faces.push([[v0,v3,v1],this.shapeColour])
+                this.faces.push([[v1,v3,v2],this.shapeColour])
+            }
+        }
+}
+}

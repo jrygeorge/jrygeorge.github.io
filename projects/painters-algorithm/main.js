@@ -8,8 +8,8 @@ const inst = document.getElementById("inst")
 
 let shapeList = []
 shapeList.push(new UVSphere(250))
-shapeList.push(new UVSphere(70))
-shapeList.push(new UVSphere(40))
+shapeList.push(new UVSphere(70,Math.PI/6))
+shapeList.push(new UVSphere(40,Math.PI/4))
 shapeList.push(new Cuboid(150,1000,150))
 shapeList.push(new Cuboid(100,200,150))
 shapeList.push(new Cuboid(100,200,150))
@@ -18,14 +18,14 @@ shapeList.push(new Cuboid(100,200,450))
 shapeList.push(new Plane(5000,5000,250))
 shapeList.push(new Plane(5000,5000,250))
 shapeList.push(new Cow(2))
-shapeList.push(new Cow(4))
+shapeList.push(new Torus(150,2))
 
 const Camera = {
     LOCATION : {X:0,Y:0,Z:0},
     ANGLE : {X:0,Y:0,Z:0},
     FOV: Math.PI/2.5,
     movementStep : 30,
-    angleStep : 0.02
+    angleStep : 0.01
 }
 
 function moveAroundCamera(face){
@@ -59,7 +59,7 @@ function step(time){
     shapeCopy[8].faces = shapeCopy[8].faces.map((face) => [translate(rotateX(face[0],Math.PI/2),-2500,300,5000),face[1]])
     shapeCopy[9].faces = shapeCopy[9].faces.map((face) => [translate(face[0],-2500,-4700,5000),face[1]])
     shapeCopy[10].faces = shapeCopy[10].faces.map((face) => [translate(rotateXYZ(face[0],0,-time/1500+Math.PI,0),1500 +400*Math.sin(time/1500),100+20*Math.sin(time/100),4000+400*Math.cos(time/1500)),face[1]])
-    shapeCopy[11].faces = shapeCopy[11].faces.map((face) => [translate(rotateXYZ(face[0],time/1000,time/500,time/200),0,-3000,4000),face[1]])
+    shapeCopy[11].faces = shapeCopy[11].faces.map((face) => [translate(rotateXYZ(face[0],time/500,time/500,0),0,-200,4000),face[1]])
     
     // This part is transformations from camera movement
     for(shape of shapeCopy){
@@ -119,11 +119,13 @@ requestAnimationFrame(step)
 document.addEventListener("keydown",function(event){
     fov =  Math.round(Camera.FOV * 180 / Math.PI * 100) / 100 ;
     switch(event.key){
-        case "w":   Camera.LOCATION.Z += Camera.movementStep * Math.cos(Camera.ANGLE.Y);
-                    Camera.LOCATION.X -= Camera.movementStep * Math.sin(Camera.ANGLE.Y);
+        case "w":   Camera.LOCATION.Z += Camera.movementStep * Math.cos(Camera.ANGLE.Y) * Math.cos(Camera.ANGLE.X);
+                    Camera.LOCATION.X -= Camera.movementStep * Math.sin(Camera.ANGLE.Y) * Math.cos(Camera.ANGLE.X);
+                    Camera.LOCATION.Y += Camera.movementStep * Math.sin(Camera.ANGLE.X)
                     break;     
-        case "s":   Camera.LOCATION.Z -= Camera.movementStep * Math.cos(Camera.ANGLE.Y);
-                    Camera.LOCATION.X += Camera.movementStep * Math.sin(Camera.ANGLE.Y);
+        case "s":   Camera.LOCATION.Z -= Camera.movementStep * Math.cos(Camera.ANGLE.Y) * Math.cos(Camera.ANGLE.X);
+                    Camera.LOCATION.X += Camera.movementStep * Math.sin(Camera.ANGLE.Y) * Math.cos(Camera.ANGLE.X);
+                    Camera.LOCATION.Y -= Camera.movementStep * Math.sin(Camera.ANGLE.X)
                     break;
         case "a":   Camera.LOCATION.Z += Camera.movementStep * Math.cos(Math.PI/2 + Camera.ANGLE.Y);
                     Camera.LOCATION.X -= Camera.movementStep * Math.sin(Math.PI/2 + Camera.ANGLE.Y);
