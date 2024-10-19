@@ -140,12 +140,16 @@ function updateScreen(){
     // updating x,y location
     Player.di += Player.vi * Player.vel * timeElapsed/1000
     Player.dj += Player.vj * Player.vel * timeElapsed/1000
+
     // containing x,y location within canvas
-    Player.di = Math.max(Math.min(Player.di,500),-500)
-    Player.dj = Math.max(Math.min(Player.dj,250),-250)
+    //Player.di = Math.max(Math.min(Player.di,500),-500)
+    Player.di = (Player.di + 1000)%1000
+    Player.dj = (Player.dj + 500)%500
+    //Player.dj = Math.max(Math.min(Player.dj,250),-250)
+
     currentColour = (currentColour + 2)%360
     ctx.fillStyle = `HSL(${currentColour},100%,50%)`
-    ctx.fillRect(500+Player.di-4,250+Player.dj-4,8,8)
+    ctx.fillRect(Player.di-4,Player.dj-4,8,8)
     document.getElementById("space").innerText = `x : ${(Player.di)|0}\ny: ${(Player.dj)|0}`
     requestAnimationFrame(updateScreen);
 }
