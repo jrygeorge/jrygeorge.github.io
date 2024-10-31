@@ -1,12 +1,3 @@
-function meanZ(face,index){
-    // find the mean of all Z-coordinates of a face
-    sumZ = 0
-    for(vert of face){
-        sumZ += vert[index]
-    }
-    return sumZ/face.length
-}
-
 function matrixMultiplication(A,B){
     if(A[0].length != B.length){throw new Error("Invalid dimensions for matrices :(")}
     /*
