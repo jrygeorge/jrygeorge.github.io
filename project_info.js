@@ -7,7 +7,7 @@ projectInformation = [
     },
     {
         name:"Painter's Algorithm",
-        description:"Small demo showing painters algo",
+        description:"Small demo showing painters algo in 2d canvas",
         filename:"painters-algorithm/painter.html",
         image:"painters_sphere.png"
     },
