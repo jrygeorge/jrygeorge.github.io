@@ -28,11 +28,5 @@ projectInformation = [
         description:"Rotate a cow. WASDQE to control. Best used on mobile.",
         filename:"cow-rotator.html",
         image:"cow.png"
-    },
-    {
-        name:"Multi-Key + Acceleration Demo",
-        description:"Small demo with realistic vel + acc that supports multiple keypresses.",
-        filename:"multi-key.html",
-        image:"multikeydemo.png"
     }
 ]
