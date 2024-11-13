@@ -1,6 +1,6 @@
 class Cuboid {
     constructor(x,y,z){
-        this.shapeColour = randomHSLString()
+        this.shapeColour = Math.floor(Math.random()*360)//randomHSLString()
         this.shapeColour2 = this.shapeColour
 
         // Each vertex is [xyzw]
@@ -45,7 +45,7 @@ class UVSphere {
         // THIS IS NOT THE RIGHT WAY TO DO THIS, THIS Will create overlaps
         // I just can't be bothered to do it properly with caps right now
         this.faces = []
-        this.shapeColour = randomHSLString()
+        this.shapeColour = Math.floor(Math.random()*360)//randomHSLString()
         for(let theta = 0; theta <  2* Math.PI ; theta+= angle){
             for(let phi = 0; phi <  Math.PI ; phi+= angle){
                 let v0 = [r*Math.sin(phi)*Math.cos(theta),              r*Math.sin(phi)*Math.sin(theta),            r*Math.cos(phi)         ,1]
@@ -69,7 +69,7 @@ class Plane {
     // creates an XY plane, rotate as necessary
     constructor(x,y,step){
         this.faces = []
-        this.shapeColour = randomHSLString()//"RGB(132, 242, 36)"
+        this.shapeColour = Math.floor(Math.random()*360)//randomHSLString()//"RGB(132, 242, 36)"
         for(let i=0;i<x;i+=step){
             for(let j=0;j<y;j+=step){
                 let v0 = [i,       j,     0,  1]
@@ -88,8 +88,9 @@ class Plane {
 class Cow {
     // MY MAGNUS OPUS
     // its incomplete but oh well
+    // also some of the faces are flipped buuuuuut idc
     constructor(scale){
-        this.shapeColour = randomHSLString()
+        this.shapeColour = Math.floor(Math.random()*360)//randomHSLString()
         let vc = [
             [-65,90,-35,1],[-55,90,-35,1],[-55,90,-25,1],[-65,90,-25,1], //foot1
             [75,90,-35,1],[85,90,-35,1],[85,90,-25,1],[75,90,-25,1], //foot2
@@ -167,12 +168,11 @@ class Cow {
             //[13,43],[29,42], // ontop-back line to thighring2 and 4
             //[8,41],[24,40],// ontop-front line to thighring1 and 3
             //44,45],[46,47]// butt
-            [[vc[40],vc[38],vc[36],vc[35],vc[33], vc[24]],this.shapeColour],//necksides
+            [[vc[40],vc[38],vc[36],vc[35],vc[33], vc[24]],this.shapeColour],
             [[vc[41],vc[39],vc[37],vc[34],vc[32], vc[8]],this.shapeColour]
         ]
 }
 }
-
 
 class Torus {
     constructor(crossSectionRadius,aspectRatio){
@@ -183,9 +183,8 @@ class Torus {
             throw new Error(`Aspect Ratio must be >= 1. Value given : ${aspectRatio}`)
         }
         this.faces = []
-        this.shapeColour = randomHSLString()
+        this.shapeColour = Math.floor(Math.random()*360)//randomHSLString()
         let sweepRadius = crossSectionRadius * aspectRatio
-        console.log(crossSectionRadius,sweepRadius)
         // I should probably have two step angles
         const step = Math.PI/10
         for(let phi=0;phi<Math.PI * 2; phi += step){
@@ -199,5 +198,5 @@ class Torus {
                 this.faces.push([[v1,v3,v2],this.shapeColour])
             }
         }
-}
+    }
 }

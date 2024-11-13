@@ -25,7 +25,8 @@ const Camera = {
     ANGLE : {X:0,Y:0,Z:0},
     FOV: Math.PI/2.5,
     movementStep : 30,
-    angleStep : 0.01
+    angleStep : 0.01,
+    LIGHTING:false
 }
 
 function moveAroundCamera(face){
@@ -56,8 +57,9 @@ function step(time){
 
     shapeCopy[7].faces = shapeCopy[7].faces.map((face) => [translate(rotateXYZ(face[0],time/2000,time/1000,1),0,50,4500),face[1]])
 
-    shapeCopy[8].faces = shapeCopy[8].faces.map((face) => [translate(rotateX(face[0],Math.PI/2),-2500,300,5000),face[1]])
-    shapeCopy[9].faces = shapeCopy[9].faces.map((face) => [translate(face[0],-2500,-4700,5000),face[1]])
+    shapeCopy[8].faces = shapeCopy[8].faces.map((face) => [translate(rotateXYZ(face[0],Math.PI/2,Math.PI,0),2500,300,5000),face[1]])
+    shapeCopy[9].faces = shapeCopy[9].faces.map((face) => [translate(rotateY(face[0],Math.PI),2500,-4700,5000),face[1]])
+
     shapeCopy[10].faces = shapeCopy[10].faces.map((face) => [translate(rotateXYZ(face[0],0,-time/1500+Math.PI,0),1500 +400*Math.sin(time/1500),100+20*Math.sin(time/100),4000+400*Math.cos(time/1500)),face[1]])
     shapeCopy[11].faces = shapeCopy[11].faces.map((face) => [translate(rotateXYZ(face[0],time/500,time/500,0),0,-2300,4000),face[1]])
     
@@ -105,14 +107,20 @@ function step(time){
             ctx.lineTo(vertex[0],vertex[1]) // chopping off Z to project
         }
         // colour from object
-        ctx.fillStyle = face[1]
+        if(Camera.LIGHTING){
+            ctx.fillStyle = HtoDiffuseColour(face)
+        }
+        else
+        {
+            ctx.fillStyle = HtoHSLString(face[1])
+        }
+        
         // colour from Normal
         // ctx.fillStyle = normalColour(face[0])
         ctx.stroke()
         ctx.fill()
     }
     requestAnimationFrame(step)
-
 }
 requestAnimationFrame(step)
 
@@ -139,8 +147,21 @@ document.addEventListener("keydown",function(event){
         case "q":   Camera.ANGLE.Y = (Camera.ANGLE.Y + Camera.angleStep)%(2*Math.PI); break;
         case "e":   Camera.ANGLE.Y = (Camera.ANGLE.Y - Camera.angleStep)%(2*Math.PI); break;
 
-        case "t":   Camera.FOV += 0.01; inst.textContent = `WS - AD - RF to move | QE to turn head | TG to change FOV (${fov} deg)`; break;
-        case "g":   Camera.FOV -= 0.01; inst.textContent = `WS - AD - RF to move | QE to turn head | TG to change FOV (${fov} deg)`; break;
+        case "t":   Camera.FOV += 0.01; inst.textContent = `C to toggle light | WS - AD - RF to move | QE to turn head | TG to change FOV (${fov} deg)`; break;
+        case "g":   Camera.FOV -= 0.01; inst.textContent = `C to toggle light | WS - AD - RF to move | QE to turn head | TG to change FOV (${fov} deg)`; break;
+
+        case "c":   Camera.LIGHTING = !Camera.LIGHTING; break;
           
     }
 })
+
+document.body.addEventListener("mousemove", function (e) {
+    if(document.pointerLockElement !== null){
+        Camera.ANGLE.Y = (Camera.ANGLE.Y + -e.movementX*Camera.angleStep)%(2*Math.PI);
+        // restraining angleX between 72 and -72
+        Camera.ANGLE.X = Math.max(Math.min((Camera.ANGLE.X + -e.movementY*Camera.angleStep),Math.PI/2.5),-Math.PI/2.5)
+}});
+
+document.addEventListener("click", function (e) {
+    document.body.requestPointerLock();
+    });

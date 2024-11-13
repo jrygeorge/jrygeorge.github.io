@@ -111,7 +111,14 @@ function randomHSLString(){
     return `HSL(${Math.floor(Math.random()*360)},100%,${Math.random()*40 + 30}%)`
 }
 
+function HtoHSLString(H){
+    // S = 1 and L = 0.55, just coz
+    return `HSL(${H},100%,55%)`
+}
+
 function normalColour(face){
+    // takes in just the face coordinates
+    // ie. face[0] in the format used here
     norm = normal(face)
 
     colour = [Math.floor(180*(1+norm[0])) ,40 + 30*(1+norm[1]),10+90*(1+norm[2])]
@@ -140,6 +147,20 @@ function normal(face){
                 BAxCA[1]/magnitude,
                 BAxCA[2]/magnitude
             ]
+}
 
+function HtoDiffuseColour(face){
+    // takes in face data (both face[0] and face[1])
+    // and creates diffuse colour
+    // with a light pointing 0,1,0
+    normalVector = normal(face[0])
+    //lightVector = [0,0,1] // as if there is an infintely far away light behind the camera (-Z)
+    // im just doing that directly below
+
+    DotProd = -normalVector[2] 
+
+    DotProd = DotProd ** 5
+
+    return `HSL(${face[1]},100%,${30+Math.floor(DotProd*60)}%)`
 
 }
