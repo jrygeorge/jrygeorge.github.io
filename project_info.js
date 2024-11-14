@@ -1,12 +1,12 @@
 projectInformation = [
     {
-        name:"Maze Escape Raycaster",
+        name:"✨ Maze Escape Raycaster",
         description:"Small maze game that works with raycasting.",
         filename:"maze.html",
         image:"maze.png"
     },
     {
-        name:"Painter's Algorithm",
+        name:"✨ Painter's Algorithm",
         description:"Small demo showing painters algo in 2d canvas",
         filename:"painters-algorithm/painter.html",
         image:"painters_sphere.png"

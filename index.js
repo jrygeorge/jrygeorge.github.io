@@ -24,7 +24,7 @@ ctx.canvas.height = headerHeight
 document.getElementById("bar").style.height = headerHeight
 heads  = document.getElementsByClassName("header")
 heads[0].style.fontSize = headerHeight/5;
-heads[1].style.fontSize = headerHeight/7;
+heads[1].style.fontSize = headerHeight/3.5;
 
 offsetX = ctx.canvas.width / 2;
 offsetY = ctx.canvas.height / 2;
@@ -104,7 +104,7 @@ for(let i=0;i<projectNumber;i++){
 document.body.appendChild(projecttable)
 
 if(window.mobileAndTabletCheck()){
-    document.getElementsByTagName("h4")[0].textContent = "just some physics and graphics-y things";
+    //document.getElementsByTagName("h4")[0].textContent = "XXXX-TEXT FOR MOBILE-XXXX";
 }
 else{
     requestAnimationFrame(updateLogo)
