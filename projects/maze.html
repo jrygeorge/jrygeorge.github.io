@@ -1,4 +1,10 @@
-<!-- A little raycasting game called Maze Escape. Jerry G (jrygeorge). -->
+<!-- 
+A little maze game. Jerry G (jrygeorge). 
+Go here to (kind of) see how it works:
+https://github.com/jrygeorge/one-page-raycaster
+-->
+
+
 <head>
     <link rel="icon" href="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAJOgAACToAYJjBRwAAACSSURBVEhLY6xZ8+I/A40BE5SmKRi1hCRAlYjPkjkBZWEHFPskim8PlIUbUGRJMMc2KAs/INsS51+roCzCgHFhTzVZcSInJc4gwMfDwM7GBqbxgeGThEctIQmMWkISoIsljOr1hmTl+BnqibTP8Rk350NZhAFFwRVxejKUhR9QHCeBR3uhLNyA7DghBdAhdTEwAAAjyRl/u18AXgAAAABJRU5ErkJggg=="/>
     <title>Maze Escape by jrygeorge</title>
@@ -69,7 +75,7 @@ function changePlayerAngle(dir,control){
     dir is if the angle is to be increased or decreased
     control is if we're using Mouse or Keyboard, as the amount moved is different for each
     */
-    playerAngle = (playerAngle + dir*playerAngleStepSize[control] + 2*PI)%(2*PI);
+    playerAngle = (playerAngle + dir*playerAngleStepSize[control] + 2*Math.PI)%(2*Math.PI);
 }
 
 function distanceToPlayer(otherX,otherY){
@@ -114,7 +120,7 @@ function computeHorizontalStripData(rayAngle){
     let toCheckY = 0
 
     // I (a) . Horizontal Edge - Looking UP
-    if ( (rayAngle > 0) && (rayAngle < PI) ){
+    if ( (rayAngle > 0) && (rayAngle < Math.PI) ){
         let offsetY = blockSize;
         let offsetX = blockSize / Math.tan(rayAngle);
         toCheckX = roundX + offsetX;
@@ -140,7 +146,7 @@ function computeHorizontalStripData(rayAngle){
         }
     }
     // I (b) . Horizontal Edge - Looking DOWN
-    if ( (rayAngle > PI) && (rayAngle < 2*PI) ){
+    if ( (rayAngle > Math.PI) && (rayAngle < 2*Math.PI) ){
         let offsetY = - blockSize;
         let offsetX = - blockSize / Math.tan(rayAngle);
         toCheckX = roundX ;
@@ -163,13 +169,17 @@ function computeHorizontalStripData(rayAngle){
                 depth = -1}
         }
     }
-    if ( (rayAngle == 0) || (rayAngle == PI) ){
+    if ( (rayAngle == 0) || (rayAngle == Math.PI) ){
         toCheckX = Infinity;
         toCheckY = Infinity;
     }
 
     horizontalDistance = distanceToPlayer(toCheckX,toCheckY);
-    return [horizontalDistance,blockType]
+
+    // remember if it doesnt hit anything >0, then the ray have blockType as
+    // whatever block it hit before it hit the map boundary
+    // so in the case of the exit (-1), it will give us 0
+    return [blockType,horizontalDistance]
 }
 
 function computeVerticalStripData(rayAngle){
@@ -184,7 +194,7 @@ function computeVerticalStripData(rayAngle){
     let toCheckY = 0;
 
     // II (a) . Vertical Edge - Looking RIGHT
-    if ( (rayAngle > 1.5*PI) || (rayAngle < PI/2) ){
+    if ( (rayAngle > 1.5*Math.PI) || (rayAngle < Math.PI/2) ){
         let offsetX = blockSize;
         let offsetY = blockSize * Math.tan(rayAngle);
         toCheckX = roundX + offsetX;
@@ -209,7 +219,7 @@ function computeVerticalStripData(rayAngle){
         }
     }
     // II (b) . Vertical Edge - Looking LEFT
-    if ( (rayAngle < 1.5*PI) && (rayAngle > PI/2) ){
+    if ( (rayAngle < 1.5*Math.PI) && (rayAngle > Math.PI/2) ){
         let offsetX = - blockSize;
         let offsetY = - blockSize * Math.tan(rayAngle);
         toCheckX = roundX ;
@@ -233,13 +243,17 @@ function computeVerticalStripData(rayAngle){
                 depth = -1}
         }
     }
-    if ( (rayAngle == PI/2 ) || (rayAngle == 1.5*PI) ){
+    if ( (rayAngle == Math.PI/2 ) || (rayAngle == 1.5*Math.PI) ){
         toCheckX = Infinity;
         toCheckY = Infinity;
     }
 
     verticalDistance = distanceToPlayer(toCheckX,toCheckY);
-    return [verticalDistance,blockType]
+
+    // remember if it doesnt hit anything >0, then the ray have blockType as
+    // whatever block it hit before it hit the map boundary
+    // so in the case of the exit (-1), it will give us 0
+    return [blockType,verticalDistance]
 }
 
 function computeStripData(){
@@ -250,29 +264,35 @@ function computeStripData(){
         Ray N is at angle : playerAngle - radsPerStrip*(stripNumber/2)
         i.e. Half the strips are on one side, half on the other.
         */
-        let rayAngle = (playerAngle + radsPerStrip*(stripNumber/2 - ray) + 2*PI)%(2*PI);
+        let rayAngle = (playerAngle + radsPerStrip*(stripNumber/2 - ray) + 2*Math.PI)%(2*Math.PI);
 
         horizontalData = computeHorizontalStripData(rayAngle)
         verticalData = computeVerticalStripData(rayAngle)
-        fishCorrection = Math.cos( (playerAngle - rayAngle + 2*PI )%(2*PI) );
+        fishCorrection = Math.cos( (playerAngle - rayAngle + 2*Math.PI )%(2*Math.PI) );
 
-        if (horizontalData[0] < verticalData[0])
-            {stripData.push([horizontalData[0]*fishCorrection,"H",horizontalData[1]]);}
+        if (horizontalData[1] < verticalData[1])
+            {stripData.push([horizontalData[0],horizontalData[1]*fishCorrection,"H"]);}
         else
-            {stripData.push([verticalData[0]*fishCorrection,"V",verticalData[1]]);}
+            {stripData.push([verticalData[0],verticalData[1]*fishCorrection,"V"]);}
     }
+    // each element of stripData is in the format :
+    // [ BlockType, DistanceToBlock, Orientation(H/V) ]
     return stripData
 }
 
 function generateStrips(){
+    /*
+    You might be wondering why I'm cloning strip0 instead of just creating
+    them all from scratch.. truth is, I didnt know you could do that,
+    but I like how it looks now, so I'm not changing it.
+    */
     for (let i = 1; i < stripNumber ; i++){
         let currentStrip = document.querySelector('#strip0');
         let clonedStrip = currentStrip.cloneNode(true);
-        clonedStrip.id = 'strip'+ (stripNumber-i) ;
+        clonedStrip.id = `strip${(stripNumber-i)}` ;
         currentStrip.after(clonedStrip)
     }
 }
-
 
 function updateRandomStrips(){
     /*
@@ -283,7 +303,7 @@ function updateRandomStrips(){
     let shift = Math.random()*2 - 1
     for (let i=0; i<stripNumber; i++){
         let stripName = "strip" + i
-        let wallHeight = Math.abs(Math.sin(shift + (2*Math.PI*i)/(1.5*stripNumber)))*35
+        let wallHeight = Math.abs(Math.sin(shift + (2*Math.Math.PI*i)/(1.5*stripNumber)))*35
         let skyGroundHeight = (100 - wallHeight)/2
         document.querySelector("#"+stripName+" #wall").style.height = wallHeight + "%";
         document.querySelector("#"+stripName+" #sky").style.height = skyGroundHeight + 10 + "%";
@@ -292,75 +312,54 @@ function updateRandomStrips(){
 }
 
 function updateAllStrips(rayInfo){
-    const blockToWallColour = new Map([
-                        ["1V", "rgb(167, 147, 130)"],
-                        ["1H", "rgb(230, 200, 176)"],
-                        ["2V", "rgb(250, 0, 0)"],
-                        ["2H", "rgb(100, 0, 0)"],
-                        ["3V", "rgb(0, 150, 0)"],
-                        ["3H", "rgb(0, 50, 0)"],
-                        ["4V", "rgb(0, 0, 256)"],
-                        ["4H", "rgb(0, 0, 100)"],
-                        ["5V", "rgb(201, 121, 16)"],
-                        ["5H", "rgb(235, 180, 52)"],
-                        ["6V", "rgb(56, 24, 150)"],
-                        ["6H", "rgb(83, 45, 196)"]
-                    ])
+    const blockToWallColour = {
+                        "0":{V:"nothing",H:"here"},
+                        "1":{V:"rgb(167, 147, 130)",H:"rgb(230, 200, 176)"},
+                        "2":{V:"rgb(250, 0, 0)",H:"rgb(100, 0, 0)"},
+                        "3":{V:"rgb(0, 150, 0)",H:"rgb(0, 50, 0)"},
+                        "4":{V:"rgb(0, 0, 256)",H:"rgb(0, 0, 100)"},
+                        "5":{V:"rgb(201, 121, 16)",H:"rgb(235, 180, 52)"},
+                        "6":{V:"rgb(56, 24, 150)",H:"rgb(83, 45, 196)"}
+                    }
 
     for (let i=0;i<stripNumber;i++){
-        
-        distance = rayInfo[i][0];
-        direction = rayInfo[i][1];
-        bType = rayInfo[i][2];
-        combo = bType+direction;
 
-        let stripName = "strip" + i;
+        // why does unpacking look so ugly??????
+        [blockType, distance, orientation] = rayInfo[i]
+
+        let stripName = `strip${i}`;
         let wallHeight =  Math.min(150 * blockSize / distance, 100);
         let skyGroundHeight = (100 - wallHeight)/2;
        
         // Setting heights of strip components
-        document.querySelector("#"+stripName+" #wall").style.height = wallHeight + "%";
-        document.querySelector("#"+stripName+" #sky").style.height = skyGroundHeight + "%";
-        document.querySelector("#"+stripName+" #ground").style.height = skyGroundHeight + "%";
+        document.querySelector(`#${stripName} #wall`).style.height   = `${wallHeight}%`;
+        document.querySelector(`#${stripName} #sky`).style.height    = `${skyGroundHeight}%`;
+        document.querySelector(`#${stripName} #ground`).style.height = `${skyGroundHeight}%`;
 
         // Setting colour of wall strip component
-        document.querySelector("#"+stripName+" #wall").style.background = blockToWallColour.get(combo);
+        document.querySelector(`#${stripName} #wall`).style.background = blockToWallColour[blockType][orientation];
         
 }}
 
-function updateSingleStrip(n,distance,direction){
-    let stripName = "strip" + n
-    let wallHeight =  Math.min(150 * blockSize / distance, 100)
-    let skyGroundHeight = (100 - wallHeight)/2
 
-    document.querySelector("#"+stripName+" #wall").style.height = wallHeight + "%";
-    document.querySelector("#"+stripName+" #sky").style.height = skyGroundHeight + "%";
-    document.querySelector("#"+stripName+" #ground").style.height = skyGroundHeight + "%";
-
-    if (direction == "V") {document.querySelector("#"+stripName+" #wall").style.background = "rgb(167, 147, 130)";}
-    if (direction == "H") {document.querySelector("#"+stripName+" #wall").style.background = "rgb(230, 200, 176)";}
-}
-
-
-let PI = Math.PI;
-const FOV = PI / 3;
+const FOV = Math.PI / 3;
 const stripNumber = 180;
 const radsPerStrip = FOV / stripNumber;
 let blockSize = 50 // Width and Height of a "block" on the Map
 let currentLevel = 0 
 
 // Setting width of first strip, this is then cloned
-document.getElementById("strip0").style.width = (100/stripNumber)+"%"
+document.getElementById("strip0").style.width = `${(100/stripNumber)}%`
 
 // PLAYER INFORMATION
 let playerStepSize = 4
-let playerAngleStepSize = {"key":PI/90, "mouse":PI/360}
+let playerAngleStepSize = {"key":Math.PI/90, "mouse":Math.PI/360}
 let playerPosition = {x:0,y:0}
 let playerAngle = 0
 
  // starting location for each map, [0,0] is top-left
 let playerStartingPositions = [[75,125],[75,75],[210,540],[225,75],[55,55]]
-let playerStartingAngles = [0,PI/2,15*PI/8,0,PI/4]
+let playerStartingAngles = [0,Math.PI/2,15*Math.PI/8,0,Math.PI/4]
 
 /*
 -1    = GOAL / EXIT
