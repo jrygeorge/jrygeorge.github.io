@@ -82,19 +82,29 @@ function step(time){
                         }
                     )
 
-    // finding mean z-values for each face
-    zMeans = []
+
+    // finding the distance to the centre/centroid/idk of each face
+    // this distance isnt perfect though, maybe try adding some tiny random values to it?
+    distances = []
     for(face of faceList.faces){
         current_zsum = 0
+        current_xsum = 0
+        current_ysum = 0
         faceVertices = face[0]
         for(vertex of faceVertices){
+            current_xsum += vertex[0]
+            current_ysum += vertex[1]
             current_zsum += vertex[2]
         }
-        zMeans.push(current_zsum/faceVertices.length)
+        // dont need to root it, relax
+        current_distance = (current_xsum/faceVertices.length)**2
+                        + (current_ysum/faceVertices.length)**2
+                        + (current_zsum/faceVertices.length)**2
+        distances.push(current_distance)
     }
     
-    // sorting faceList by the zMean values
-    faceList.faces.sort(function(a,b) { return zMeans[faceList.faces.indexOf(b)] - zMeans[faceList.faces.indexOf(a)] })
+    // sorting faceList by the distance values
+    faceList.faces.sort(function(a,b) { return distances[faceList.faces.indexOf(b)] - distances[faceList.faces.indexOf(a)] })
     
 
 
