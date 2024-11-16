@@ -1,0 +1,3 @@
+[submodule "projects/toroidal-geometry-demo"]
+	path = projects/toroidal-geometry-demo
+	url = https://github.com/jrygeorge/toroidal-geometry-demo
