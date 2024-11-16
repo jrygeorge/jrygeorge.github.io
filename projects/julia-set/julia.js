@@ -6,10 +6,16 @@ canvas.width = document.body.offsetWidth
 
 gl.viewport(0, 0, canvas.width, canvas.height);
 
-var imSlider = document.getElementById("imaginary");
-var reSlider = document.getElementById("real");
-var complexNumber = document.getElementById("complex");
-complexNumber.innerText = `c = ${reSlider.value/100000} + ${imSlider.value/100000}i`
+let imSlider = document.getElementById("imaginary");
+let reSlider = document.getElementById("real");
+let complexNumber = document.getElementById("complex");
+
+
+function updateComplexNumber(){
+    let operator = "+"
+    if(imSlider.value<0){operator="-"}
+    complexNumber.innerText = `Drag to move and Scroll to zoom ✧ C = ${reSlider.value/100000} ${operator} ${Math.abs(imSlider.value)/100000}i`
+}
 
 const Controller =
         {   X:0,
@@ -22,13 +28,13 @@ const Controller =
         }
 
 imSlider.oninput = function() {
-    complexNumber.innerText = `c = ${reSlider.value/100000} + ${imSlider.value/100000}i`;
+    updateComplexNumber()
     Controller.B = this.value/100000
   }
   
   reSlider.oninput = function() {
-      complexNumber.innerText = `c = ${reSlider.value/100000} + ${imSlider.value/100000}i`
-      Controller.A = this.value/100000
+    updateComplexNumber()
+    Controller.A = this.value/100000
     }
 
 vertexShaderSource = 
@@ -229,8 +235,11 @@ gl.vertexAttribPointer(
     2 * Float32Array.BYTES_PER_ELEMENT, // one vertex size
     0 )// where we are starting from in each vertex, for points we start at 0 (its 0,1)
 
+updateComplexNumber()
+gl.useProgram(program)
+
 function draw(step){
-    gl.useProgram(program)
+    
     clearAll(0.5,0.0,0.9,1.0)
 
     gl.bindVertexArray(vao)
