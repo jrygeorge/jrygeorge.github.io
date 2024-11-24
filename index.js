@@ -4,7 +4,6 @@ const ctx = canvas.getContext("2d");
 a = window.innerHeight;
 b = window.innerWidth;
 
-
 /*
 Stolen from the first answer from https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
 which took it from http://detectmobilebrowsers.com/
@@ -69,7 +68,6 @@ for(let i=0;i<projectNumber;i++){
 
     // putting an "a" inside the div so we can add the href
     const cell = document.createElement("a");
-    cell.className = "cellDiv"
     cell.setAttribute("href","projects/"+projectInformation[i]["filename"])
     cell.setAttribute("target","_blank")
     const thumb =  document.createElement("img");
@@ -88,17 +86,22 @@ for(let i=0;i<projectNumber;i++){
     let head4 = document.createElement("h4");
     head4.className = "header cell"
     head4.style.textAlign = "center"
-    head4.style.marginTop = "10px"
+    head4.style.marginTop = "2px"
 
     const projectDescription = document.createTextNode(projectInformation[i]["description"]);
     head4.appendChild(projectDescription)
-        
 
-
-    cell.appendChild(head3)
-    cell.appendChild(head4)
+    /*
+    codelink = document.createElement("a")
+    codelink.setAttribute("href",projectInformation[i]["link"])
+    codelink.setAttribute("target","_blank")
+    codelink.textContent = "< CODE >"
+    */
 
     cellDiv.appendChild(cell)
+    cellDiv.appendChild(head3)
+    //cellDiv.appendChild(codelink)
+    cellDiv.appendChild(head4)
     projecttable.appendChild(cellDiv)
 }
 document.body.appendChild(projecttable)
