@@ -91,16 +91,15 @@ for(let i=0;i<projectNumber;i++){
     const projectDescription = document.createTextNode(projectInformation[i]["description"]);
     head4.appendChild(projectDescription)
 
-    /*
     codelink = document.createElement("a")
     codelink.setAttribute("href",projectInformation[i]["link"])
     codelink.setAttribute("target","_blank")
+    codelink.setAttribute("font-size","5")
     codelink.textContent = "< CODE >"
-    */
 
     cellDiv.appendChild(cell)
     cellDiv.appendChild(head3)
-    //cellDiv.appendChild(codelink)
+    cellDiv.appendChild(codelink)
     cellDiv.appendChild(head4)
     projecttable.appendChild(cellDiv)
 }
