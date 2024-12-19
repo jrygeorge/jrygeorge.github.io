@@ -8,7 +8,7 @@ projectInformation = [
     },
     {
         name:"✨ Toroidal Geometry Game",
-        description:"Go through the doors in the right order to win",
+        description:"Simple memory game. Jump down to see the effect properly :P",
         filename:"toroidal-geometry-demo/js/toroidal.html",
         image:"toroidal.jpg",
         link:"https://github.com/jrygeorge/toroidal-geometry-demo"
